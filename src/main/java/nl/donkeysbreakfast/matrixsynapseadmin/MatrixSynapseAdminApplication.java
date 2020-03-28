@@ -6,6 +6,7 @@ import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
 import io.dropwizard.client.JerseyClientBuilder;
+import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
@@ -39,8 +40,14 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
     public void run(final MatrixSynapseAdminConfiguration configuration,
             final Environment environment) {
 
+        JerseyClientConfiguration jerseyClientConfiguration 
+                = configuration.getJerseyClientConfiguration();
+        //jerseyClientConfiguration.setChunkedEncodingEnabled(true); 
+        // Matrix-Synapse-Server kann scheinbar nicht mit GZIPter Anfrage umgehen!
+        jerseyClientConfiguration.setGzipEnabledForRequests(false); 
+        jerseyClientConfiguration.setGzipEnabled(false); 
         final Client client = new JerseyClientBuilder(environment)
-                .using(configuration.getJerseyClientConfiguration())
+                .using(jerseyClientConfiguration)
                 .build(getName());
         //client.register(new RequestClientLoggingFilter());
         client.register(new EntityLoggingFilter());
