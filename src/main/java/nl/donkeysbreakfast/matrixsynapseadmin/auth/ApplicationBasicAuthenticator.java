@@ -30,44 +30,48 @@ import nl.donkeysbreakfast.matrixsynapseadmin.api.MatrixIdUserIdentifier;
  * @author Telegraphenbauanstalt
  */
 public class ApplicationBasicAuthenticator implements Authenticator<BasicCredentials, User> {
-    
+
     private final Client client;
     private final String homeserver;
-    
+
     public ApplicationBasicAuthenticator(Client client, String homeserver) {
         this.client = client;
         this.homeserver = homeserver;
     }
-    
+
     @Override
     public Optional<User> authenticate(BasicCredentials c) throws AuthenticationException {
 
         AuthDict authDict = new AuthDict(new MatrixIdUserIdentifier(c.getUsername()), c.getPassword());
-        
+
         WebTarget webTarget = client.target(homeserver)
                 .path("/_matrix/client/r0/login");
         Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
         Response response = builder.post(Entity.entity(authDict, MediaType.APPLICATION_JSON));
-        
+
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
                 .info(String.format("status %s", response.getStatus()));
-        
+
         if (!response.getStatusInfo().getFamily().equals(Family.SUCCESSFUL)) {
             ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
             Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
                     .info(String.format("%s %s", errorResponse.getErrcode(), errorResponse.getError()));
             return Optional.empty();
-        }        
+        }
         LoginResponse entity = response.readEntity(LoginResponse.class);
-        
+
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName()).info(String.format("%s", response));
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName()).info(String.format("%s", entity));
 
         if (response.getStatus() == 200) {
-            return Optional.of(new User(entity.getUserId(), 1, new HashSet<>(Arrays.asList(new String[]{"admin"}))));
+            return Optional.of(
+                    new User(entity.getUserId(),
+                            entity.getAccessToken(),
+                            new HashSet<>(Arrays.asList(new String[]{"admin"})) // TODO vom Server abfragen?
+                    ));
         }
-        
+
         return Optional.empty();
     }
-    
+
 }

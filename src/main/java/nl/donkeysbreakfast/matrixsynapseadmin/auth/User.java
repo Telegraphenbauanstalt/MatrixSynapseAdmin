@@ -10,13 +10,13 @@ import java.util.Set;
 public class User implements Principal {
 
     private final String name;
-    private final int userId;
+    private final String accessToken;
 
     private final Set<String> roles;
 
-    public User(String name, int userId, Set<String> roles) {
+    public User(String name, String accessToken, Set<String> roles) {
         this.name = name;
-        this.userId = userId;
+        this.accessToken = accessToken;
         this.roles = roles;
     }
 
@@ -24,8 +24,8 @@ public class User implements Principal {
         return name;
     }
 
-    public int getUserId() {
-        return userId;
+    public String getAccessToken() {
+        return accessToken;
     }
 
     public Set<String> getRoles() {
