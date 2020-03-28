@@ -3,6 +3,7 @@ package nl.donkeysbreakfast.matrixsynapseadmin;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
+import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.Authenticator;
 import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
@@ -19,6 +20,7 @@ import nl.donkeysbreakfast.matrixsynapseadmin.auth.User;
 import nl.donkeysbreakfast.matrixsynapseadmin.health.TemplateHealthCheck;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.HelloWorldResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.ServerVersionResource;
+import nl.donkeysbreakfast.matrixsynapseadmin.resources.UserAdminResource;
 
 public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdminConfiguration> {
 
@@ -69,6 +71,9 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
                         .setRealm("MatrixSynapseAdmin Login")
                         .buildAuthFilter()
         ));
+        environment.jersey().register(
+                new AuthValueFactoryProvider.Binder<>(User.class)
+        ); // damit @Auth-Annotation benutzt werden kann
 
         final HelloWorldResource helloWorldResource
                 = new HelloWorldResource("Hello %s", "world");
@@ -81,6 +86,10 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final ServerVersionResource serverVersionResource
                 = new ServerVersionResource(client, configuration.getHomeserver());
         environment.jersey().register(serverVersionResource);
+
+        final UserAdminResource userAdminResource
+                = new UserAdminResource(client, configuration.getHomeserver());
+        environment.jersey().register(userAdminResource);
     }
 
 }
