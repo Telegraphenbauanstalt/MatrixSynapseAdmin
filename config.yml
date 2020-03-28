@@ -1,5 +1,7 @@
 homeserver: http://localhost:8008
 authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
+server:
+    rootPath: /api/
 logging:
   level: INFO
   loggers:

@@ -2,6 +2,7 @@ package nl.donkeysbreakfast.matrixsynapseadmin;
 
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import io.dropwizard.Application;
+import io.dropwizard.assets.AssetsBundle;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.AuthValueFactoryProvider;
 import io.dropwizard.auth.Authenticator;
@@ -35,6 +36,9 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
 
     @Override
     public void initialize(final Bootstrap<MatrixSynapseAdminConfiguration> bootstrap) {
+        bootstrap.addBundle(
+                new AssetsBundle("/assets/", "/", "index.html", "root")
+        );
         bootstrap.addBundle(
                 new ViewBundle<MatrixSynapseAdminConfiguration>()
         );
