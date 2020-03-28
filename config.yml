@@ -1,0 +1,5 @@
+homeserver: http://localhost:8008
+logging:
+  level: INFO
+  loggers:
+    nl.donkeysbreakfast: DEBUG
