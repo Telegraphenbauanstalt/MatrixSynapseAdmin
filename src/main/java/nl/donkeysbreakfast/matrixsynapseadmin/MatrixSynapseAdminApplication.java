@@ -4,7 +4,9 @@ import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.Authenticator;
+import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
+import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.client.JerseyClientBuilder;
 import io.dropwizard.client.JerseyClientConfiguration;
 import io.dropwizard.setup.Bootstrap;
@@ -40,12 +42,12 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
     public void run(final MatrixSynapseAdminConfiguration configuration,
             final Environment environment) {
 
-        JerseyClientConfiguration jerseyClientConfiguration 
+        JerseyClientConfiguration jerseyClientConfiguration
                 = configuration.getJerseyClientConfiguration();
         //jerseyClientConfiguration.setChunkedEncodingEnabled(true); 
         // Matrix-Synapse-Server kann scheinbar nicht mit GZIPter Anfrage umgehen!
-        jerseyClientConfiguration.setGzipEnabledForRequests(false); 
-        jerseyClientConfiguration.setGzipEnabled(false); 
+        jerseyClientConfiguration.setGzipEnabledForRequests(false);
+        jerseyClientConfiguration.setGzipEnabled(false);
         final Client client = new JerseyClientBuilder(environment)
                 .using(jerseyClientConfiguration)
                 .build(getName());
@@ -55,13 +57,14 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final Authenticator basicAuthenticator = new ApplicationBasicAuthenticator(
                 client, configuration.getHomeserver()
         );
-//        final CachingAuthenticator<BasicCredentials, User> cachingAuthenticator = new CachingAuthenticator<>(
-//                           metricRegistry, authenticator,
-//                           configuration.getAuthenticationCachePolicy());
+        final CachingAuthenticator<BasicCredentials, User> cachingAuthenticator
+                = new CachingAuthenticator<>(
+                        environment.metrics(), basicAuthenticator,
+                        configuration.getAuthenticationCachePolicy());
         environment.jersey().register(new AuthDynamicFeature(
                 new BasicCredentialAuthFilter.Builder<User>()
-                        .setAuthenticator(basicAuthenticator)
-                        //.setAuthenticator(cachingAuthenticator)
+                        //.setAuthenticator(basicAuthenticator)
+                        .setAuthenticator(cachingAuthenticator)
                         .setAuthorizer(new ApplicationAuthorizer())
                         .setRealm("MatrixSynapseAdmin Login")
                         .buildAuthFilter()
