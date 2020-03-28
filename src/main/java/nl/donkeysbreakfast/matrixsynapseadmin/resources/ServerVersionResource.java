@@ -47,7 +47,7 @@ public class ServerVersionResource {
         Response response = builder.get();
         ServerVersion entity = response.readEntity(ServerVersion.class);
 
-        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%", response));
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", response));
         Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
 
         return entity;
@@ -63,7 +63,7 @@ public class ServerVersionResource {
         Response response = builder.get();
         ServerVersion entity = response.readEntity(ServerVersion.class);
         //
-        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%", response));
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", response));
         Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
 
         return new ServerVersionView(entity);
