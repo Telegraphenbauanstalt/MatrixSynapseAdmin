@@ -4,13 +4,35 @@
         <title>TODO supply a title</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+            .inline {
+                display: inline;
+            }
+
+            .link-button {
+                background: none;
+                border: none;
+                color: blue;
+                text-decoration: underline;
+                cursor: pointer;
+                font-size: 1em;
+                font-family: serif;
+            }
+            .link-button:focus {
+                outline: none;
+            }
+            .link-button:active {
+                color:red;
+            }
+        </style>
     </head>
     <body>
         <h1>MatrixSynapseAdmin</h1>
         <ul>
             <li><a href="api/server_version">Serverversion</a></li>
             <li><a href="api/users">User List</a></li>
-<!--            <li><a href="api/logout">Logout</a></li>-->
+            <li><form class="inline" action="api/logout" method="POST">
+                    <button type="submit" name="logout" value="true" class="link-button">Logout</button></form></li>
         </ul>
     </body>
 </html>

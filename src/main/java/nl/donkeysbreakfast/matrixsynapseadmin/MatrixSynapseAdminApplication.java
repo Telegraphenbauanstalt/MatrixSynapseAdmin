@@ -20,20 +20,21 @@ import nl.donkeysbreakfast.matrixsynapseadmin.auth.ApplicationBasicAuthenticator
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.AuthUser;
 import nl.donkeysbreakfast.matrixsynapseadmin.health.TemplateHealthCheck;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.HelloWorldResource;
+import nl.donkeysbreakfast.matrixsynapseadmin.resources.LogoutResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.ServerVersionResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.UserAdminResource;
 
 public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdminConfiguration> {
-
+    
     public static void main(final String[] args) throws Exception {
         new MatrixSynapseAdminApplication().run(args);
     }
-
+    
     @Override
     public String getName() {
         return "MatrixSynapseAdmin";
     }
-
+    
     @Override
     public void initialize(final Bootstrap<MatrixSynapseAdminConfiguration> bootstrap) {
         bootstrap.addBundle(
@@ -43,11 +44,11 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
                 new ViewBundle<MatrixSynapseAdminConfiguration>()
         );
     }
-
+    
     @Override
     public void run(final MatrixSynapseAdminConfiguration configuration,
             final Environment environment) {
-
+        
         JerseyClientConfiguration jerseyClientConfiguration
                 = configuration.getJerseyClientConfiguration();
         //jerseyClientConfiguration.setChunkedEncodingEnabled(true); 
@@ -59,7 +60,7 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
                 .build(getName());
         client.register(new EntityLoggingFilter());
         client.register(JacksonJsonProvider.class);
-
+        
         final Authenticator basicAuthenticator = new ApplicationBasicAuthenticator(
                 client, configuration.getHomeserver()
         );
@@ -81,18 +82,22 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final HelloWorldResource helloWorldResource
                 = new HelloWorldResource("Hello %s", "world");
         environment.jersey().register(helloWorldResource);
-
+        
         final TemplateHealthCheck templateHealthCheck
                 = new TemplateHealthCheck("Hello %s");
         environment.healthChecks().register("template", templateHealthCheck);
-
+        
+        final LogoutResource logoutResource
+                = new LogoutResource();
+        environment.jersey().register(logoutResource);
+        
         final ServerVersionResource serverVersionResource
                 = new ServerVersionResource(client, configuration.getHomeserver());
         environment.jersey().register(serverVersionResource);
-
+        
         final UserAdminResource userAdminResource
                 = new UserAdminResource(client, configuration.getHomeserver());
         environment.jersey().register(userAdminResource);
     }
-
+    
 }
