@@ -4,8 +4,8 @@ import io.dropwizard.Configuration;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import io.dropwizard.client.JerseyClientConfiguration;
 import javax.validation.Valid;
-import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.NotEmpty;
 
 public class MatrixSynapseAdminConfiguration extends Configuration {
 

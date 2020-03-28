@@ -1,15 +1,11 @@
 package nl.donkeysbreakfast.matrixsynapseadmin;
 
-import com.fasterxml.jackson.jaxrs.json.JacksonJaxbJsonProvider;
 import com.fasterxml.jackson.jaxrs.json.JacksonJsonProvider;
 import io.dropwizard.Application;
 import io.dropwizard.auth.AuthDynamicFeature;
 import io.dropwizard.auth.Authenticator;
-import io.dropwizard.auth.CachingAuthenticator;
 import io.dropwizard.auth.basic.BasicCredentialAuthFilter;
-import io.dropwizard.auth.basic.BasicCredentials;
 import io.dropwizard.client.JerseyClientBuilder;
-import io.dropwizard.jersey.jackson.JacksonFeature;
 import io.dropwizard.setup.Bootstrap;
 import io.dropwizard.setup.Environment;
 import io.dropwizard.views.ViewBundle;
