@@ -29,7 +29,7 @@ import nl.donkeysbreakfast.matrixsynapseadmin.api.MatrixIdUserIdentifier;
  *
  * @author Telegraphenbauanstalt
  */
-public class ApplicationBasicAuthenticator implements Authenticator<BasicCredentials, User> {
+public class ApplicationBasicAuthenticator implements Authenticator<BasicCredentials, AuthUser> {
 
     private final Client client;
     private final String homeserver;
@@ -40,7 +40,7 @@ public class ApplicationBasicAuthenticator implements Authenticator<BasicCredent
     }
 
     @Override
-    public Optional<User> authenticate(BasicCredentials c) throws AuthenticationException {
+    public Optional<AuthUser> authenticate(BasicCredentials c) throws AuthenticationException {
 
         AuthDict authDict = new AuthDict(new MatrixIdUserIdentifier(c.getUsername()), c.getPassword());
 
@@ -65,7 +65,7 @@ public class ApplicationBasicAuthenticator implements Authenticator<BasicCredent
 
         if (response.getStatus() == 200) {
             return Optional.of(
-                    new User(entity.getUserId(),
+                    new AuthUser(entity.getUserId(),
                             entity.getAccessToken(),
                             new HashSet<>(Arrays.asList(new String[]{"admin"})) // TODO vom Server abfragen?
                     ));

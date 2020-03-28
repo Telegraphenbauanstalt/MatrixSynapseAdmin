@@ -6,10 +6,10 @@ import io.dropwizard.auth.Authorizer;
  *
  * @author Telegraphenbauanstalt
  */
-public class ApplicationAuthorizer implements Authorizer<User> {
+public class ApplicationAuthorizer implements Authorizer<AuthUser> {
 
     @Override
-    public boolean authorize(User principal, String role) {
+    public boolean authorize(AuthUser principal, String role) {
         return principal.getRoles() != null
                 && principal.getRoles().contains(role);
     }

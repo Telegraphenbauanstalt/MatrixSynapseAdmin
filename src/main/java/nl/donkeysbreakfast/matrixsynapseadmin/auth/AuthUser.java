@@ -7,14 +7,14 @@ import java.util.Set;
  *
  * @author Telegraphenbauanstalt
  */
-public class User implements Principal {
+public class AuthUser implements Principal {
 
     private final String name;
     private final String accessToken;
 
     private final Set<String> roles;
 
-    public User(String name, String accessToken, Set<String> roles) {
+    public AuthUser(String name, String accessToken, Set<String> roles) {
         this.name = name;
         this.accessToken = accessToken;
         this.roles = roles;

@@ -16,7 +16,7 @@ import io.dropwizard.views.ViewBundle;
 import javax.ws.rs.client.Client;
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.ApplicationAuthorizer;
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.ApplicationBasicAuthenticator;
-import nl.donkeysbreakfast.matrixsynapseadmin.auth.User;
+import nl.donkeysbreakfast.matrixsynapseadmin.auth.AuthUser;
 import nl.donkeysbreakfast.matrixsynapseadmin.health.TemplateHealthCheck;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.HelloWorldResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.ServerVersionResource;
@@ -59,20 +59,19 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final Authenticator basicAuthenticator = new ApplicationBasicAuthenticator(
                 client, configuration.getHomeserver()
         );
-        final CachingAuthenticator<BasicCredentials, User> cachingAuthenticator
+        final CachingAuthenticator<BasicCredentials, AuthUser> cachingAuthenticator
                 = new CachingAuthenticator<>(
                         environment.metrics(), basicAuthenticator,
                         configuration.getAuthenticationCachePolicy());
         environment.jersey().register(new AuthDynamicFeature(
-                new BasicCredentialAuthFilter.Builder<User>()
+                new BasicCredentialAuthFilter.Builder<AuthUser>()
                         //.setAuthenticator(basicAuthenticator)
                         .setAuthenticator(cachingAuthenticator)
                         .setAuthorizer(new ApplicationAuthorizer())
                         .setRealm("MatrixSynapseAdmin Login")
                         .buildAuthFilter()
         ));
-        environment.jersey().register(
-                new AuthValueFactoryProvider.Binder<>(User.class)
+        environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AuthUser.class)
         ); // damit @Auth-Annotation benutzt werden kann
 
         final HelloWorldResource helloWorldResource

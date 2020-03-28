@@ -11,7 +11,8 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import nl.donkeysbreakfast.matrixsynapseadmin.auth.User;
+import nl.donkeysbreakfast.matrixsynapseadmin.api.Users;
+import nl.donkeysbreakfast.matrixsynapseadmin.auth.AuthUser;
 
 /**
  *
@@ -19,7 +20,7 @@ import nl.donkeysbreakfast.matrixsynapseadmin.auth.User;
  */
 @Path("") // Every resource class must have a @Path annotation.
 public class UserAdminResource {
-    
+
     private final Client client;
     private final String homeserver;
 
@@ -27,44 +28,48 @@ public class UserAdminResource {
         this.client = client;
         this.homeserver = homeserver;
     }
-    
+
     @GET
     @Path("users")
     @Produces(MediaType.APPLICATION_JSON)
     @RolesAllowed("admin")
-    public String getUsers(@Auth User user) {
-        
+    public Users getUsers(@Auth AuthUser user) {
+
         Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", user));
-        
+
         WebTarget webTarget = client.target(homeserver)
                 .path("/_synapse/admin/v2/users");
-        
+
         Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
         builder = builder.header("Authorization", "Bearer " + user.getAccessToken());
         Response response = builder.get();
-        //ServerVersion entity = response.readEntity(ServerVersion.class);
+        Users entity = response.readEntity(Users.class);
 
         Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", response));
-        //Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
 
-        return response.readEntity(String.class);
+        return entity;
     }
-    
-//    @GET
-//    @Path("users")
-//    @Produces(MediaType.TEXT_HTML)
-//    @RolesAllowed("admin")
-//    public String getUsersHtml() {
-//        WebTarget webTarget = client.target(homeserver)
-//                .path("/_synapse/admin/v2/users");
-//        Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
-//        Response response = builder.get();
-//        //ServerVersion entity = response.readEntity(ServerVersion.class);
-//
-//        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", response));
-//        //Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
-//
-//        return response.readEntity(String.class);
-//    }
-    
+
+    @GET
+    @Path("users")
+    @Produces(MediaType.TEXT_HTML)
+    @RolesAllowed("admin")
+    public UserAdminView getUsersHtml(@Auth AuthUser user) {
+
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", user));
+
+        WebTarget webTarget = client.target(homeserver)
+                .path("/_synapse/admin/v2/users");
+
+        Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+        builder = builder.header("Authorization", "Bearer " + user.getAccessToken());
+        Response response = builder.get();
+        Users entity = response.readEntity(Users.class);
+
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", response));
+        Logger.getLogger(ServerVersionResource.class.getName()).info(String.format("%s", entity));
+
+        return new UserAdminView(entity);
+    }
 }
