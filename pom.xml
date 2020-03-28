@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project
-        xmlns="http://maven.apache.org/POM/4.0.0"
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+    xmlns="http://maven.apache.org/POM/4.0.0"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,21 +16,8 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-<!--        <dropwizard.version>2.0.2</dropwizard.version>-->
         <mainClass>nl.donkeysbreakfast.matrixsynapseadmin.MatrixSynapseAdminApplication</mainClass>
     </properties>
-
-<!--    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>io.dropwizard</groupId>
-                <artifactId>dropwizard-dependencies</artifactId>
-                <version>${dropwizard.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>-->
 
     <dependencies>
         <dependency>
@@ -44,7 +31,7 @@
             <version>1.3.20</version>
         </dependency>
         <dependency>
-            <groupId>io.dropwizard</groupId><!-- ?? für client -->
+            <groupId>io.dropwizard</groupId><!-- nötig für jerseyclient ? -->
             <artifactId>dropwizard-jackson</artifactId>
             <version>1.3.20</version>
         </dependency>

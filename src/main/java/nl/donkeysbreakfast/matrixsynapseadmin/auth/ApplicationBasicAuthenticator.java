@@ -46,29 +46,12 @@ public class ApplicationBasicAuthenticator implements Authenticator<BasicCredent
         
         WebTarget webTarget = client.target(homeserver)
                 .path("/_matrix/client/r0/login");
-        //webTarget = webTarget.register(JacksonJsonProvider.class); // ???
         Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
-//        Response response = builder.post(Entity.entity(authDict, MediaType.APPLICATION_JSON));
-        Response response = null;
-//        try {
-//            ObjectMapper mapper = new ObjectMapper().enable(SerializationFeature.INDENT_OUTPUT);
-////            Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
-////              .info(String.format("%s", mapper.writeValueAsString(authDict)));
-//            response = builder.post(Entity.json(mapper.writeValueAsString(authDict)));
-//            
-//        } catch (JsonProcessingException e) {
-//            Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
-//                    .log(Level.WARNING, "", e);
-//        }
-        response = builder.post(Entity.json("{\n"
-                + "  \"type\": \"m.login.password\",\n"
-                + "  \"username\": \"" + c.getUsername() + "\",\n"
-                + "  \"password\": \"" + c.getPassword() + "\",\n"
-                + "  \"initial_device_display_name\": \"Jungle Phone\"\n"
-                + "}"));
+        Response response = builder.post(Entity.entity(authDict, MediaType.APPLICATION_JSON));
         
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
                 .info(String.format("status %s", response.getStatus()));
+        
         if (!response.getStatusInfo().getFamily().equals(Family.SUCCESSFUL)) {
             ErrorResponse errorResponse = response.readEntity(ErrorResponse.class);
             Logger.getLogger(ApplicationBasicAuthenticator.class.getName())
@@ -80,12 +63,6 @@ public class ApplicationBasicAuthenticator implements Authenticator<BasicCredent
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName()).info(String.format("%s", response));
         Logger.getLogger(ApplicationBasicAuthenticator.class.getName()).info(String.format("%s", entity));
 
-        // TODO auth mit Backend
-//        if ("admin".equals(c.getUsername())
-//                && "password2".equals(c.getPassword())) {
-//
-//            return Optional.of(new User(c.getUsername(), 1, Set.of(new String[]{"admin"})));
-//        }
         if (response.getStatus() == 200) {
             return Optional.of(new User(entity.getUserId(), 1, new HashSet<>(Arrays.asList(new String[]{"admin"}))));
         }

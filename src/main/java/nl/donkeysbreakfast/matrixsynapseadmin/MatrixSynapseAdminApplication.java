@@ -49,10 +49,8 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final Client client = new JerseyClientBuilder(environment)
                 .using(jerseyClientConfiguration)
                 .build(getName());
-        //client.register(new RequestClientLoggingFilter());
         client.register(new EntityLoggingFilter());
-        //client.register(JacksonJsonProvider.class);
-        client.register(new JacksonJsonProvider());
+        client.register(JacksonJsonProvider.class);
 
         final Authenticator basicAuthenticator = new ApplicationBasicAuthenticator(
                 client, configuration.getHomeserver()
