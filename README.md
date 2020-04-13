@@ -1,5 +1,7 @@
 # MatrixSynapseAdmin
 
+Test
+
 Admin UI for Matrix-Synapse Server based on Dropwizard, inspired by https://github.com/Awesome-Technologies/synapse-admin
 
 **This project is a work in progress and at a very early stage!**
