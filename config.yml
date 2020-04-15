@@ -2,6 +2,13 @@ homeserver: http://localhost:8008
 authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
 server:
     rootPath: /api/
+    applicationConnectors:
+        - type: http
+          port: 8090
+    adminConnectors:
+        - type: http
+          port: 8091
+        
 logging:
   level: INFO
   loggers:
