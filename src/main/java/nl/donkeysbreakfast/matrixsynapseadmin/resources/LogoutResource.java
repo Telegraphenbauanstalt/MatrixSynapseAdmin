@@ -34,7 +34,7 @@ public class LogoutResource {
 
         return Response
                 .status(Response.Status.UNAUTHORIZED)
-                .header("WWW-Authenticate", "Basic realm=\"logout\"")
+                .header("WWW-Authenticate", "Basic realm=\"MatrixSynapseAdmin Login\"")
                 .entity("")
                 .build();
 
