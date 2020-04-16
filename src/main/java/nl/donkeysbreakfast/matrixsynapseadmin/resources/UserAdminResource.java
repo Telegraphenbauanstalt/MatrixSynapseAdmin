@@ -18,6 +18,8 @@ import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.NewUser;
+import nl.donkeysbreakfast.matrixsynapseadmin.api.User;
+import nl.donkeysbreakfast.matrixsynapseadmin.api.UserDetails;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.Users;
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.AuthUser;
 
@@ -62,7 +64,7 @@ public class UserAdminResource {
     @Path("users")
     @Produces(MediaType.TEXT_HTML)
     @RolesAllowed("admin")
-    public UserAdminView getUsersHtml(@Auth AuthUser user) {
+    public UserAdminUserlistView getUsersHtml(@Auth AuthUser user) {
 
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", user));
 
@@ -77,7 +79,53 @@ public class UserAdminResource {
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", response));
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", entity));
 
-        return new UserAdminView(entity);
+        return new UserAdminUserlistView(entity);
+    }
+
+    @GET
+    @Path("users/{user_id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    @RolesAllowed("admin")
+    public UserDetails getUser(@PathParam("user_id") String userId, @Auth AuthUser user) {
+
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", user));
+
+        WebTarget webTarget = client.target(homeserver)
+                .path("/_synapse/admin/v2/users/{user_id}") // oder v1/whois/... ?
+                .resolveTemplate("user_id", userId);
+
+        Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+        builder = builder.header("Authorization", "Bearer " + user.getAccessToken());
+        Response response = builder.get();
+        UserDetails entity = response.readEntity(UserDetails.class);
+
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", response));
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", entity));
+
+        return entity;
+    }
+
+    @GET
+    @Path("users/{user_id}")
+    @Produces(MediaType.TEXT_HTML)
+    @RolesAllowed("admin")
+    public UserAdminUserView getUserHtml(@PathParam("user_id") String userId, @Auth AuthUser user) {
+
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", user));
+
+        WebTarget webTarget = client.target(homeserver)
+                .path("/_synapse/admin/v2/users/{user_id}") // oder v1/whois/... ?
+                .resolveTemplate("user_id", userId);
+
+        Invocation.Builder builder = webTarget.request(MediaType.APPLICATION_JSON);
+        builder = builder.header("Authorization", "Bearer " + user.getAccessToken());
+        Response response = builder.get();
+        UserDetails entity = response.readEntity(UserDetails.class);
+
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", response));
+        Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", entity));
+
+        return new UserAdminUserView(entity);
     }
 
     @PUT
@@ -128,7 +176,7 @@ public class UserAdminResource {
 //        }
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("userId: %s", userId));
         return putUser(userId, newUser, user);
-        
+
         // TODO kein return -> redirect GET !
     }
 };

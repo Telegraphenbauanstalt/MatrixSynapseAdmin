@@ -7,11 +7,11 @@ import nl.donkeysbreakfast.matrixsynapseadmin.api.Users;
  *
  * @author Telegraphenbauanstalt
  */
-public class UserAdminView extends View {
+public class UserAdminUserlistView extends View {
 
     private final Users users;
 
-    public UserAdminView(Users users) {
+    public UserAdminUserlistView(Users users) {
         super("user_admin_userlist.ftl");
         this.users = users;
     }
