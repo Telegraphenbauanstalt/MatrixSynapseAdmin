@@ -1,6 +1,8 @@
+# siehe https://www.dropwizard.io/en/latest/manual/configuration.html
 homeserver: http://localhost:8008
 authenticationCachePolicy: maximumSize=10000, expireAfterAccess=10m
 server:
+    applicationContextPath: /admin
     rootPath: /api/
     applicationConnectors:
         - type: http
