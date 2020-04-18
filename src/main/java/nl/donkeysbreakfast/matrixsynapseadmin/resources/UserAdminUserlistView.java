@@ -7,7 +7,7 @@ import nl.donkeysbreakfast.matrixsynapseadmin.api.Users;
  *
  * @author Telegraphenbauanstalt
  */
-public class UserAdminUserlistView extends View {
+public class UserAdminUserlistView extends ViewWithContext {
 
     private final Users users;
 

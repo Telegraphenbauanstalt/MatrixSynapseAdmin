@@ -29,4 +29,6 @@
         </table>
 
         <a href="../newuser.html" class="btn btn-primary btn-lg" role="button">Neu</a>
+
+        <!-- basePath: ${basePath} -->
 </@u.page>

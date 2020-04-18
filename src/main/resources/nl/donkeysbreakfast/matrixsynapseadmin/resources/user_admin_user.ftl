@@ -72,6 +72,7 @@ $(document).ready(function(){
             </div>
 
             <!-- TODO: if INPUT - submit Button -->
+            <!-- basePath: ${basePath} -->
 
         </form>
 

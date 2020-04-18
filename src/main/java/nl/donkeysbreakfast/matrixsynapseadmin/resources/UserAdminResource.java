@@ -17,6 +17,7 @@ import javax.ws.rs.client.Invocation;
 import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import nl.donkeysbreakfast.matrixsynapseadmin.ContextForView;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.NewUser;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.User;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.UserDetails;
@@ -32,10 +33,12 @@ public class UserAdminResource {
 
     private final Client client;
     private final String homeserver;
+//    private final String applicationContextPath;
 
-    public UserAdminResource(Client client, String homeserver) {
+    public UserAdminResource(Client client, String homeserver/*, String applicationContextPath*/) {
         this.client = client;
         this.homeserver = homeserver;
+//        this.applicationContextPath = applicationContextPath;
     }
 
     @GET
@@ -64,6 +67,7 @@ public class UserAdminResource {
     @Path("users")
     @Produces(MediaType.TEXT_HTML)
     @RolesAllowed("admin")
+    @ContextForView
     public UserAdminUserlistView getUsersHtml(@Auth AuthUser user) {
 
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", user));
@@ -79,7 +83,10 @@ public class UserAdminResource {
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", response));
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", entity));
 
-        return new UserAdminUserlistView(entity);
+        UserAdminUserlistView userAdminUserlistView = new UserAdminUserlistView(entity);
+//        userAdminUserlistView.setBasePath(applicationContextPath);
+        return userAdminUserlistView;
+        //return new UserAdminUserlistView(applicationContextPath, entity);
     }
 
     @GET
@@ -109,6 +116,7 @@ public class UserAdminResource {
     @Path("users/{user_id}")
     @Produces(MediaType.TEXT_HTML)
     @RolesAllowed("admin")
+    @ContextForView
     public UserAdminUserView getUserHtml(@PathParam("user_id") String userId, @Auth AuthUser user) {
 
         Logger.getLogger(UserAdminResource.class.getName()).info(String.format("%s", user));

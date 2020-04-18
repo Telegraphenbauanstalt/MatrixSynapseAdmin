@@ -1,13 +1,12 @@
 package nl.donkeysbreakfast.matrixsynapseadmin.resources;
 
-import io.dropwizard.views.View;
 import nl.donkeysbreakfast.matrixsynapseadmin.api.UserDetails;
 
 /**
  *
  * @author Telegraphenbauanstalt
  */
-public class UserAdminUserView extends View {
+public class UserAdminUserView extends ViewWithContext {
 
     private final UserDetails userDetails;
 

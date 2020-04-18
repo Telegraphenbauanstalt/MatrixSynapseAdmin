@@ -78,7 +78,10 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         ));
         environment.jersey().register(new AuthValueFactoryProvider.Binder<>(AuthUser.class)
         ); // damit @Auth-Annotation benutzt werden kann
-
+        
+        environment.jersey().register(
+                new ContextFilter(environment.getApplicationContext().getContextPath()));
+        
         final HelloWorldResource helloWorldResource
                 = new HelloWorldResource("Hello %s", "world");
         environment.jersey().register(helloWorldResource);
@@ -98,6 +101,7 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         final UserAdminResource userAdminResource
                 = new UserAdminResource(client, configuration.getHomeserver());
         environment.jersey().register(userAdminResource);
+        
     }
     
 }
