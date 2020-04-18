@@ -32,4 +32,9 @@ public class AuthUser implements Principal {
         return roles;
     }
 
+    @Override
+    public String toString() {
+        return "AuthUser{" + "name=" + name + ", accessToken=" + (accessToken != null && !accessToken.isEmpty()) + ", roles=" + roles + '}';
+    }
+
 }
