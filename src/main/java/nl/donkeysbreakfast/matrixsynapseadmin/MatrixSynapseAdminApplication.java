@@ -19,9 +19,9 @@ import nl.donkeysbreakfast.matrixsynapseadmin.auth.ApplicationAuthorizer;
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.ApplicationBasicAuthenticator;
 import nl.donkeysbreakfast.matrixsynapseadmin.auth.AuthUser;
 import nl.donkeysbreakfast.matrixsynapseadmin.health.TemplateHealthCheck;
-import nl.donkeysbreakfast.matrixsynapseadmin.resources.HelloWorldResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.LogoutResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.ServerVersionResource;
+import nl.donkeysbreakfast.matrixsynapseadmin.resources.StartResource;
 import nl.donkeysbreakfast.matrixsynapseadmin.resources.UserAdminResource;
 
 public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdminConfiguration> {
@@ -82,13 +82,12 @@ public class MatrixSynapseAdminApplication extends Application<MatrixSynapseAdmi
         environment.jersey().register(
                 new ContextFilter(environment.getApplicationContext().getContextPath()));
         
-        final HelloWorldResource helloWorldResource
-                = new HelloWorldResource("Hello %s", "world");
-        environment.jersey().register(helloWorldResource);
-        
         final TemplateHealthCheck templateHealthCheck
                 = new TemplateHealthCheck("Hello %s");
         environment.healthChecks().register("template", templateHealthCheck);
+        
+        final StartResource startResource = new StartResource();
+        environment.jersey().register(startResource);
         
         final LogoutResource logoutResource
                 = new LogoutResource();

@@ -16,11 +16,6 @@ import javax.ws.rs.core.Response;
 @Path("/logout")
 public class LogoutResource {
 
-//    public String logoquest) {
-//
-//        request.getSession().invalidate();
-//        return "You have been logged out.";
-//    }
     @POST
     @PermitAll
     @Timed
